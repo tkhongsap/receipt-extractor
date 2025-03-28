@@ -73,11 +73,23 @@ st.markdown("""
         max-height: none !important;
         cursor: zoom-in;
     }
+    
+    /* ทำให้เส้นใต้ของชื่อบางลง */
+    .stApp header {
+        border-bottom-width: 1px !important;
+        border-bottom-color: rgba(38, 39, 48, 0.1) !important;
+    }
+    
+    /* ปรับแต่งเส้นใต้ของหัวข้อต่างๆ ให้บางลง */
+    h1, h2, h3, h4, h5, h6 {
+        border-bottom: 1px solid rgba(38, 39, 48, 0.1) !important;
+        padding-bottom: 0.3em;
+    }
 </style>
 """, unsafe_allow_html=True)
 
 # Application title
-st.markdown("<h1 style='text-align: center;'>ระบบตรวจสอบใบเสร็จจาก AI (OpenAI Azure)</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; border-bottom: 1px solid rgba(38, 39, 48, 0.1); padding-bottom: 0.3em;'>ระบบตรวจสอบใบเสร็จจาก AI (OpenAI Azure)</h1>", unsafe_allow_html=True)
 
 # Initialize session state variables if they don't exist
 if 'current_index' not in st.session_state:
