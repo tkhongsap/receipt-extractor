@@ -65,18 +65,20 @@ try:
             )
             
             # Update current index when dropdown selection changes
-            selected_index = int(re.search(r'(\d+)\.', selected_file).group(1)) - 1
-            if selected_index != st.session_state.current_index:
-                st.session_state.current_index = selected_index
-                st.session_state.verified_fields = {
-                    'tax_id': False,
-                    'receipt_number': False,
-                    'date': False,
-                    'time': False,
-                    'total_amount': False,
-                    'store_name': False
-                }
-                st.rerun()
+            selected_match = re.search(r'(\d+)\.', selected_file)
+            if selected_match:
+                selected_index = int(selected_match.group(1)) - 1
+                if selected_index != st.session_state.current_index:
+                    st.session_state.current_index = selected_index
+                    st.session_state.verified_fields = {
+                        'tax_id': False,
+                        'receipt_number': False,
+                        'date': False,
+                        'time': False,
+                        'total_amount': False,
+                        'store_name': False
+                    }
+                    st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
     
     # Get the current receipt data
@@ -147,7 +149,19 @@ try:
             st.markdown(f"**Receipt Number:** {receipt_number_value}")
             
         # Date
-        date_value = current_receipt['Date'].strftime('%Y-%m-%d') if pd.notna(current_receipt['Date']) else "ไม่พบข้อมูล"
+        date_value = "ไม่พบข้อมูล"
+        if pd.notna(current_receipt['Date']):
+            try:
+                # Check if the date is already a string
+                if isinstance(current_receipt['Date'], str):
+                    date_value = current_receipt['Date']
+                else:
+                    # Try to format as date if it's a datetime object
+                    date_value = current_receipt['Date'].strftime('%Y-%m-%d')
+            except:
+                # If any error occurs, use the original value as is
+                date_value = str(current_receipt['Date'])
+        
         col_date = st.columns([0.1, 0.9])
         with col_date[0]:
             date = st.checkbox("", value=st.session_state.verified_fields['date'], key='date_checkbox')
@@ -165,7 +179,13 @@ try:
             st.markdown(f"**Time:** {time_value}")
             
         # Total Amount
-        total_amount_value = f"{current_receipt['Total Amount']:.2f}" if pd.notna(current_receipt['Total Amount']) else "ไม่พบข้อมูล"
+        total_amount_value = "ไม่พบข้อมูล"
+        if pd.notna(current_receipt['Total Amount']):
+            try:
+                total_amount_value = f"{float(current_receipt['Total Amount']):.2f}"
+            except:
+                total_amount_value = str(current_receipt['Total Amount'])
+                
         col_total = st.columns([0.1, 0.9])
         with col_total[0]:
             total_amount = st.checkbox("", value=st.session_state.verified_fields['total_amount'], key='total_amount_checkbox')
