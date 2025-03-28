@@ -1,11 +1,9 @@
 import streamlit as st
 import pandas as pd
-import requests
-from PIL import Image
-from io import BytesIO
-import os
 import re
+import os
 from utils import load_excel_data, get_receipt_image
+from PIL import Image
 
 # Set page configuration
 st.set_page_config(
@@ -147,9 +145,10 @@ try:
                 # Update current index when dropdown selection changes
                 selected_match = re.search(r'(\d+)\.', selected_file)
                 if selected_match:
+                    # แปลงเป็น int และเก็บเป็น Python int (ไม่ใช่ numpy.int64)
                     selected_index = int(selected_match.group(1)) - 1
                     if selected_index != st.session_state.current_index:
-                        st.session_state.current_index = selected_index
+                        st.session_state.current_index = int(selected_index)  # ใช้ int() เพื่อแปลงเป็น Python int
                         st.session_state.verified_fields = {
                             'tax_id': False,
                             'receipt_number': False,
@@ -178,7 +177,8 @@ try:
     
     # Get the current receipt data from available receipts
     if len(available_receipts) > 0:
-        current_index = min(st.session_state.current_index, len(available_receipts)-1)
+        # แปลงเป็น Python int เพื่อป้องกันปัญหา numpy.int64
+        current_index = int(min(st.session_state.current_index, len(available_receipts)-1))
         current_receipt = available_receipts.iloc[current_index]
         json_filename = current_receipt['Source JSON File']
         img_filename = json_filename.replace('.json', '.jpg')
@@ -359,7 +359,8 @@ try:
                         # Get the index of the first unverified receipt from the original dataframe
                         next_receipt = unverified_receipts.iloc[0]['Source JSON File']
                         next_index = receipts_data[receipts_data['Source JSON File'] == next_receipt].index[0]
-                        st.session_state.current_index = next_index
+                        # แปลงเป็น Python int เพื่อป้องกันปัญหา numpy.int64
+                        st.session_state.current_index = int(next_index)
                 
                 st.rerun()
         
@@ -382,7 +383,8 @@ try:
                         # Get the index of the first unverified receipt from the original dataframe
                         next_receipt = unverified_receipts.iloc[0]['Source JSON File']
                         next_index = receipts_data[receipts_data['Source JSON File'] == next_receipt].index[0]
-                        st.session_state.current_index = next_index
+                        # แปลงเป็น Python int เพื่อป้องกันปัญหา numpy.int64
+                        st.session_state.current_index = int(next_index)
                 
                 st.rerun()
 
