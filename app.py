@@ -12,13 +12,13 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS for portrait image display and full dropdown text
+# Custom CSS for portrait image display, full dropdown text และการซูมภาพ
 st.markdown("""
 <style>
-    /* Image display as portrait - stronger forcing */
+    /* Image display as portrait - ไม่จำกัดความสูงและความกว้างเพื่อให้ใช้ความละเอียดต้นฉบับ */
     div.stImage > img {
-        max-height: 800px !important;
-        max-width: 70% !important;
+        max-height: none !important;
+        max-width: 100% !important;
         width: auto !important;
         margin: 0 auto !important;
         display: block !important;
@@ -59,6 +59,19 @@ st.markdown("""
         text-overflow: clip !important;
         line-height: 1.4 !important;
         padding: 8px !important;
+    }
+    
+    /* ปรับแต่ง expander สำหรับการซูมภาพ */
+    .streamlit-expanderHeader {
+        font-weight: bold;
+        color: #FF4B4B;
+    }
+    
+    /* ทำให้ภาพในโหมดซูมมีขนาดใหญ่ */
+    div[data-testid="stExpander"] div.stImage > img {
+        max-width: 100% !important;
+        max-height: none !important;
+        cursor: zoom-in;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -209,7 +222,13 @@ try:
                     # Use 270 degrees instead of 90 to avoid upside-down images
                     receipt_image = receipt_image.rotate(270, expand=True)
                 
-                st.image(receipt_image, use_container_width=False, width=300)
+                # เพิ่มเครื่องมือซูมภาพด้วย st.expander
+                with st.expander("คลิกที่นี่เพื่อซูมภาพ", expanded=False):
+                    # แสดงภาพขนาดใหญ่ในความละเอียดเต็มเมื่อคลิกที่ expander
+                    st.image(receipt_image, use_container_width=True, caption="คลิกขวาที่ภาพและเลือก 'Open image in new tab' เพื่อดูภาพขนาดเต็ม")
+                
+                # แสดงภาพในหน้าหลักด้วยความละเอียดต้นฉบับ ไม่กำหนดความกว้าง
+                st.image(receipt_image, use_container_width=False)
             else:
                 st.warning("ไม่พบรูปภาพใบเสร็จ")
             
