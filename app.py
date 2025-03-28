@@ -17,12 +17,22 @@ st.set_page_config(
 # Custom CSS for portrait image display
 st.markdown("""
 <style>
-    /* Image display as portrait */
+    /* Image display as portrait - stronger forcing */
     div.stImage > img {
-        max-height: 800px;
+        max-height: 800px !important;
+        max-width: 70% !important;
         width: auto !important;
-        margin: 0 auto;
-        display: block;
+        margin: 0 auto !important;
+        display: block !important;
+        transform: rotate(0deg) !important;
+    }
+    
+    /* Container for image with fixed height */
+    div[data-testid="column"]:first-child > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
     
     /* Checkbox styling for accessibility */
@@ -165,7 +175,13 @@ try:
             # Display receipt image in portrait orientation
             receipt_image = get_receipt_image(json_filename)
             if receipt_image:
-                st.image(receipt_image, use_container_width=False)
+                # Resize image to be taller than it is wide (force portrait mode)
+                width, height = receipt_image.size
+                if width > height:
+                    # This is a landscape image, rotate it to portrait
+                    receipt_image = receipt_image.rotate(90, expand=True)
+                
+                st.image(receipt_image, use_container_width=False, width=300)
             else:
                 st.warning("ไม่พบรูปภาพใบเสร็จ")
             
