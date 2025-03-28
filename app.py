@@ -14,7 +14,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS for portrait image display
+# Custom CSS for portrait image display and full dropdown text
 st.markdown("""
 <style>
     /* Image display as portrait - stronger forcing */
@@ -38,6 +38,29 @@ st.markdown("""
     /* Checkbox styling for accessibility */
     .stCheckbox label {
         min-width: 50px !important;
+    }
+    
+    /* Make dropdown wider to show full text */
+    div[data-testid="stSelectbox"] {
+        width: 100%;
+        min-width: 300px;
+    }
+    
+    /* Prevent dropdown text from being truncated */
+    div[data-testid="stSelectbox"] > div > div > div {
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        max-width: 100% !important;
+    }
+    
+    /* Fix for dropdown options */
+    div[role="listbox"] div[role="option"] {
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        line-height: 1.4 !important;
+        padding: 8px !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -95,8 +118,11 @@ try:
     elif st.session_state.current_index >= len(available_receipts):
         st.session_state.current_index = 0
     
-    # Create file options for dropdown
-    file_options = [f"{i+1}. {file}" for i, file in enumerate(available_receipts['Source JSON File'])]
+    # Create file options for dropdown - show full filename
+    file_options = []
+    for i, file in enumerate(available_receipts['Source JSON File']):
+        # เพิ่มหมายเลขและใช้ชื่อไฟล์เต็มโดยไม่ตัด
+        file_options.append(f"{i+1}. {file}")
     
     # Dropdown for file selection
     with st.container():
