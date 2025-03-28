@@ -151,7 +151,7 @@ try:
     with st.container():
         st.markdown(
             """
-            <div style='background-color: #FF4B4B; color: white; padding: 10px; border-radius: 10px;'>
+            <div style='border-top: 1px solid #FF4B4B; border-bottom: 1px solid #FF4B4B; padding: 10px;'>
             """, 
             unsafe_allow_html=True
         )
@@ -348,7 +348,7 @@ try:
             # Count the total number of verified items in each category
             st.markdown(
                 f"""
-                <div style='background-color: #FF4B4B; color: white; padding: 15px; border-radius: 10px;'>
+                <div style='border: 1px solid #FF4B4B; padding: 15px; border-radius: 10px;'>
                     <p style='margin: 5px;'><b>true6:</b> {st.session_state.verification_stats['true6']}</p>
                     <p style='margin: 5px;'><b>true5:</b> {st.session_state.verification_stats['true5']}</p>
                     <p style='margin: 5px;'><b>true4:</b> {st.session_state.verification_stats['true4']}</p>
