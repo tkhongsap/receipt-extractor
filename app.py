@@ -179,7 +179,8 @@ try:
                 width, height = receipt_image.size
                 if width > height:
                     # This is a landscape image, rotate it to portrait
-                    receipt_image = receipt_image.rotate(90, expand=True)
+                    # Use 270 degrees instead of 90 to avoid upside-down images
+                    receipt_image = receipt_image.rotate(270, expand=True)
                 
                 st.image(receipt_image, use_container_width=False, width=300)
             else:
