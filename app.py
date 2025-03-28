@@ -7,7 +7,7 @@ from PIL import Image
 
 # Set page configuration
 st.set_page_config(
-    page_title="ระบบตรวจสอบใบเสร็จจาก AI",
+    page_title="ระบบตรวจสอบใบเสร็จจาก AI (OpenAI Azure)",
     page_icon="🧾",
     layout="wide"
 )
@@ -77,7 +77,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Application title
-st.markdown("<h1 style='text-align: center;'>ระบบตรวจสอบใบเสร็จจาก AI</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>ระบบตรวจสอบใบเสร็จจาก AI (OpenAI Azure)</h1>", unsafe_allow_html=True)
 
 # Initialize session state variables if they don't exist
 if 'current_index' not in st.session_state:
