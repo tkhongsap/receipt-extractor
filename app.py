@@ -132,7 +132,8 @@ try:
             """, 
             unsafe_allow_html=True
         )
-        col_dropdown = st.columns([1, 3])
+        # แก้ไขสัดส่วนของคอลัมน์ให้กว้างขึ้นเพื่อป้องกันการทับซ้อน
+        col_dropdown = st.columns([2, 1])
         with col_dropdown[0]:
             if len(file_options) > 0:
                 selected_file = st.selectbox(
